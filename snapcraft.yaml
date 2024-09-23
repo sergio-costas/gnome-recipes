@@ -1,6 +1,6 @@
 name: gnome-recipes
 adopt-info: gnome-recipes
-base: core22
+base: core24
 summary: GNOME loves to cook
 description: |
   Recipes is an easy-to-use application that will help you to discover what to cook
@@ -75,20 +75,22 @@ parts:
       - libgnome-autoar-0-dev
     stage-packages:
       - libgnome-autoar-0-0
+    build-snaps:
+      - gnome-46-2404-sdk/latest/candidate
 
 
   cleanup:
     after: [ gnome-recipes ]
     plugin: nil
-    build-snaps: [core22, gtk-common-themes, gnome-42-2204]
+    build-snaps: [core24, gtk-common-themes, gnome-46-2404]
     override-prime: |
       set -eux
-      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do
+      for snap in "core24" "gtk-common-themes" "gnome-46-2404"; do
         cd "/snap/$snap/current" && find . -type f,l -name *.so.* -exec rm -f "$CRAFT_PRIME/{}" \;
       done
       # remove cross-installed repeated libraries (in /usr/lib in the SDK, but in /usr/lib/TRIPLET
       # here, and the opposite)
-      for snap in "core22" "gnome-42-2204"; do
+      for snap in "core24" "gnome-46-2404"; do
         cd "/snap/$snap/current/usr/lib"
         for filename in [ *.so* ]; do
           rm -f "$CRAFT_PRIME/usr/lib/$CRAFT_ARCH_TRIPLET/$filename"
